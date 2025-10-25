@@ -1,0 +1,31 @@
+.statistics {
+    padding: 20px;
+  }
+  
+  .stats-table {
+    margin-top: 20px;
+  }
+  
+  .stats-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .stats-table th,
+  .stats-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .stats-table th {
+    background-color: #f0f0f0;
+  }
+  
+  .dark .stats-table th {
+    background-color: #444444;
+  }
+  
+  .dark .stats-table td {
+    color: #ffffff;
+  }

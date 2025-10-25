@@ -1,0 +1,12 @@
+.help {
+  padding: 20px;
+}
+
+.help h2 {
+  margin-bottom: 20px;
+}
+
+.help ul {
+  list-style: disc;
+  padding-left: 20px;
+}

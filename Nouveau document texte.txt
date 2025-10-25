@@ -1,0 +1,187 @@
+nous 'avons in tergré ce api en python voici la structure 
+    Répertoire : E:\DiagnosisProject-main
+Mode                 LastWriteTime         Length Name                                                                                       
+----                 -------------         ------ ----                                                                                       
+d-----        17/07/2025     21:44                diagnosis_api                                                                              
+d-----        17/07/2025     21:44                patients                                                                                   
+d-----        17/07/2025     21:45                venv                                                                                       
+-a----        18/07/2025     03:33            335 .env                                                                                       
+-a----        18/07/2025     03:33           3002 main.ipynb                                                                                 
+-a----        18/07/2025     03:33            527 manage.py                                                                                  
+-a----        18/07/2025     03:33            102 pytest.ini                                                                                 
+-a----        18/07/2025     03:33            309 requirements.txt
+
+
+PS E:\DiagnosisProject-main> cd patients
+PS E:\DiagnosisProject-main\patients> ls
+
+
+    Répertoire : E:\DiagnosisProject-main\patients
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        17/07/2025     21:44                migrations
+d-----        17/07/2025     21:44                utils
+d-----        17/07/2025     21:44                __pycache__
+-a----        18/07/2025     03:33            560 admin.py
+-a----        18/07/2025     03:33            147 apps.py
+-a----        18/07/2025     03:33            980 ml.py
+-a----        18/07/2025     03:33        7383473 model.joblib
+-a----        18/07/2025     03:33           1069 models.py
+-a----        18/07/2025     03:33            398 permissions.py
+-a----        18/07/2025     03:33            955 serializers.py
+-a----        18/07/2025     03:32            600 tests_api.py
+-a----        18/07/2025     03:32            274 tests_ml.py
+-a----        18/07/2025     03:33            817 tests_web.py
+-a----        18/07/2025     03:33            633 train_model_interactive.py
+-a----        18/07/2025     03:32            253 urls.py
+-a----        18/07/2025     03:33           1272 views.py
+-a----        18/07/2025     03:33             57 __init__.py
+
+
+PS E:\DiagnosisProject-main\patients> avec admin.py    from django.contrib import admin
+from .models import Patient, Symptom, Diagnostic
+
+@admin.register(Patient)
+class PatientAdmin(admin.ModelAdmin):
+    list_display = ('id', 'full_name', 'date_of_birth')
+    search_fields = ('full_name',)
+
+@admin.register(Symptom)
+class SymptomAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'patient', 'created_at')
+    list_filter = ('name',)
+
+@admin.register(Diagnostic)
+class DiagnosticAdmin(admin.ModelAdmin):
+    list_display = ('id', 'patient', 'disease', 'probability', 'date')
+    list_filter = ('disease',)
+apps.py from django.apps import AppConfig
+
+class PatientsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'patients'
+ml.py      import os, joblib
+import pandas as pd
+
+BASE = os.path.dirname(__file__)
+MODEL_PATH = os.path.join(BASE, 'model.joblib')
+
+# Charge un tuple (model, x_train) pour récupérer feature_names
+try:
+    model, x_train = joblib.load(MODEL_PATH)
+except:
+    # ancien format : seul le model
+    loaded = joblib.load(MODEL_PATH)
+    model, x_train = loaded, None
+
+def predict_disease(symptoms_list):
+    """
+    Adapte make_prediction pour le web :
+    - symptoms_list : liste de strings
+    """
+    # Reconstruire un DataFrame identique
+    if x_train is None:
+        # si on n'a pas x_train, on crée un DataFrame à une colonne 'symptoms_text'
+        df = pd.DataFrame({"symptoms_text": [" ".join(symptoms_list)]})
+    else:
+        take_input = {f: (1 if f in symptoms_list else 0) for f in x_train.columns}
+        df = pd.DataFrame([take_input])
+
+    proba = model.predict_proba(df)[0]
+    idx = proba.argmax()
+    disease = model.classes_[idx]
+    return disease, float(proba[idx])     
+ //models.py  from django.db import models
+
+class Patient(models.Model):
+    full_name = models.CharField(max_length=150)
+    date_of_birth = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.full_name
+
+class Symptom(models.Model):
+    patient = models.ForeignKey(
+        Patient,
+        on_delete=models.CASCADE,
+        related_name='symptoms',
+        db_index=True
+    )
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} for {self.patient.full_name}"
+
+class Diagnostic(models.Model):
+    patient = models.ForeignKey(
+        Patient,
+        on_delete=models.CASCADE,
+        related_name='diagnostics',
+        db_index=True
+    )
+    disease = models.CharField(max_length=100)
+    probability = models.FloatField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.disease} ({self.probability:.2f})"
+permission.py    from rest_framework.permissions import BasePermission
+
+class IsPractitioner(BasePermission):
+    """
+    Autorise uniquement les utilisateurs appartenant au groupe 'Médecins'.
+    """
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.groups.filter(name="Médecins").exists()
+        )
+serializers.py    import pytest
+from rest_framework.test import APIClient
+from django.contrib.auth.models import User
+
+@pytest.fixture
+def api_client(db):
+    user = User.objects.create_user('m','m')
+    client = APIClient()
+    token = client.post('/api/token/',{'username':'m','password':'m'}).data['access']
+    client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    return client
+
+def test_submit_symptoms(api_client):
+    res = api_client.post('/api/symptoms/',{'symptoms':['fièvre']},format='json')
+    assert res.status_code == 200
+    assert 'diagnostic' in res.data
+    assert 'web_results' in res.data           import pytest
+from .ml import predict_disease
+
+@pytest.mark.parametrize("symptoms", [
+    ["fièvre","toux"],
+    ["maux de tête"]
+])
+def test_predict(symptoms):
+    disease, prob = predict_disease(symptoms)
+    assert isinstance(disease, str)
+    assert 0.0 <= prob <= 1.0             tests_api.py     import pytest
+from rest_framework.test import APIClient
+from django.contrib.auth.models import User
+
+@pytest.fixture
+def api_client(db):
+    user = User.objects.create_user('m','m')
+    client = APIClient()
+    token = client.post('/api/token/',{'username':'m','password':'m'}).data['access']
+    client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+    return client
+
+def test_submit_symptoms(api_client):
+    res = api_client.post('/api/symptoms/',{'symptoms':['fièvre']},format='json')
+    assert res.status_code == 200
+    assert 'diagnostic' in res.data
+    assert 'web_results' in res.data  tests_ml.py        

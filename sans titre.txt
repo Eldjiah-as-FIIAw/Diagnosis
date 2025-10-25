@@ -1,0 +1,296 @@
+import React, { useState, useEffect } from 'react';
+import './Search.css';
+
+interface Patient {
+  id: number;
+  full_name: string;
+  date_of_birth: string;
+}
+
+interface Symptom {
+  id: number;
+  name: string;
+  created_at: string;
+}
+
+interface Diagnostic {
+  id: number;
+  disease: string;
+  probability: number;
+  date: string;
+}
+
+interface History {
+  patient: Patient;
+  symptoms: Symptom[];
+  diagnostics: Diagnostic[];
+}
+
+const Search: React.FC = () => {
+  const [searchParams, setSearchParams] = useState({
+    name: '',
+    symptom: '',
+    date: '',
+    dateRange: { start: '', end: '' },
+  });
+  const [results, setResults] = useState<Patient[]>([]);
+  const [history, setHistory] = useState<History | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  const API_BASE_URL = 'http://localhost:8000'; // URL de l'API Django
+
+  // Obtenir le token JWT au montage du composant
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/token/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: 'm', // Remplacer par vos identifiants
+            password: 'm',
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Échec de l\'authentification');
+        }
+
+        const data = await response.json();
+        setToken(data.access);
+      } catch (err) {
+        setError('Erreur lors de l\'obtention du token');
+      }
+    };
+
+    fetchToken();
+  }, []);
+
+  const handleSearch = async () => {
+    if (!token) {
+      setError('Token d\'authentification manquant');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const query = new URLSearchParams();
+      if (searchParams.name) query.set('full_name', searchParams.name);
+      // Note : La recherche par symptôme ou date peut nécessiter un endpoint spécifique
+      // Nous supposons un endpoint GET /api/patients/ pour lister les patients
+
+      const response = await fetch(`${API_BASE_URL}/api/patients/?${query.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setResults(data);
+    } catch (err) {
+      setError(err.message || 'Erreur lors de la recherche');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmitSymptoms = async (patientId: number) => {
+    if (!token) {
+      setError('Token d\'authentification manquant');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/symptoms/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          patient_id: patientId,
+          symptoms: searchParams.symptom ? [searchParams.symptom] : [],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setHistory({ patient: { id: patientId, full_name: searchParams.name, date_of_birth: '' }, symptoms: [], diagnostics: [data.diagnostic] });
+    } catch (err) {
+      setError(err.message || 'Erreur lors de la soumission des symptômes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGetHistory = async (patientId: number) => {
+    if (!token) {
+      setError('Token d\'authentification manquant');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/history/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setHistory(data);
+    } catch (err) {
+      setError(err.message || 'Erreur lors de la récupération de l\'historique');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleExportCSV = async () => {
+    if (!token) {
+      setError('Token d\'authentification manquant');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/patients/export/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'text/csv',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'patients_export.csv';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message || 'Erreur lors de l\'exportation CSV');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="search-container">
+      <div className="search-box">
+        <input
+          type="text"
+          placeholder="Nom du patient"
+          value={searchParams.name}
+          onChange={(e) => setSearchParams({ ...searchParams, name: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Symptôme"
+          value={searchParams.symptom}
+          onChange={(e) => setSearchParams({ ...searchParams, symptom: e.target.value })}
+        />
+        <input
+          type="date"
+          value={searchParams.date}
+          onChange={(e) => setSearchParams({ ...searchParams, date: e.target.value })}
+        />
+        <div className="date-range">
+          <input
+            type="date"
+            placeholder="Date de début"
+            value={searchParams.dateRange.start}
+            onChange={(e) =>
+              setSearchParams({
+                ...searchParams,
+                dateRange: { ...searchParams.dateRange, start: e.target.value },
+              })
+            }
+          />
+          <input
+            type="date"
+            placeholder="Date de fin"
+            value={searchParams.dateRange.end}
+            onChange={(e) =>
+              setSearchParams({
+                ...searchParams,
+                dateRange: { ...searchParams.dateRange, end: e.target.value },
+              })
+            }
+          />
+        </div>
+        <button onClick={handleSearch} disabled={loading}>
+          {loading ? 'Recherche...' : 'Rechercher'}
+        </button>
+        <button onClick={handleExportCSV} disabled={loading}>
+          {loading ? 'Exportation...' : 'Exporter en CSV'}
+        </button>
+        {error && <p className="error">{error}</p>}
+      </div>
+      <div className="results">
+        {results.map((patient) => (
+          <div key={patient.id} className="patient">
+            <p>Nom: {patient.full_name}</p>
+            <p>Date de naissance: {patient.date_of_birth}</p>
+            <button onClick={() => handleSubmitSymptoms(patient.id)}>
+              Soumettre Symptôme
+            </button>
+            <button onClick={() => handleGetHistory(patient.id)}>
+              Voir Historique
+            </button>
+          </div>
+        ))}
+      </div>
+      {history && (
+        <div className="history">
+          <h3>Historique pour {history.patient.full_name}</h3>
+          <h4>Symptômes</h4>
+          {history.symptoms.map((symptom) => (
+            <p key={symptom.id}>{symptom.name} ({symptom.created_at})</p>
+          ))}
+          <h4>Diagnostics</h4>
+          {history.diagnostics.map((diagnostic) => (
+            <p key={diagnostic.id}>
+              {diagnostic.disease} ({(diagnostic.probability * 100).toFixed(2)}%) - {diagnostic.date}
+            </p>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Search;

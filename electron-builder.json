@@ -1,0 +1,17 @@
+{
+  "appId": "com.diagnosis.app",
+  "productName": "Diagnosis",
+  "icon": "assets/logoDiagnosis.png",
+  "files": [
+    "dist-electron/main.js",
+    "dist-electron/preload.js",
+    "frontend/dist/**/*"
+  ],
+  "directories": {
+    "output": "release",
+    "app": "."
+  },
+  "win": {
+    "target": "nsis"
+  }
+}

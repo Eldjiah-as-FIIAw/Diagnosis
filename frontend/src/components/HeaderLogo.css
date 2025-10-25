@@ -1,0 +1,46 @@
+.header-logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px; /* Hauteur de la section */
+    background-color: #ffffff; /* Fond clair */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Espacement entre logo1, texte, logo2 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1100; /* Au-dessus de la navbar (z-index: 1000) */
+  }
+  
+  .dark .header-logo {
+    background-color: #2a2a2a; /* Fond sombre */
+  }
+  
+  .header-logo-img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .header-logo-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333333; /* Texte sombre pour le mode clair */
+  }
+  
+  .dark .header-logo-title {
+    color: #ffffff; /* Texte clair pour le mode sombre */
+  }
+  
+  @media (max-width: 768px) {
+    .header-logo {
+      height: 60px; /* Réduire la hauteur sur mobile */
+    }
+    .header-logo-img {
+      width: 40px;
+      height: 40px;
+    }
+    .header-logo-title {
+      font-size: 24px;
+    }
+  }

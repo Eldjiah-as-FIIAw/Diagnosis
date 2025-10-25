@@ -1,0 +1,18 @@
+.analysis {
+  padding: 20px;
+}
+
+.analysis .form-group {
+  margin-bottom: 20px;
+}
+
+.analysis .form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.analysis .form-group input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

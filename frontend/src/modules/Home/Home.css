@@ -1,0 +1,16 @@
+.home {
+  padding: 20px;
+}
+
+.home h2 {
+  margin-bottom: 20px;
+}
+
+.home p {
+  margin-bottom: 15px;
+}
+
+.home ul {
+  list-style: disc;
+  padding-left: 20px;
+}

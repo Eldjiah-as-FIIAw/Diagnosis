@@ -1,0 +1,296 @@
+/* === Animation d'apparition douce === */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Conteneur principal du formulaire de diagnostic */
+.diagnostic-form {
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out; /* Animation à l’affichage */
+}
+
+/* Titres */
+.diagnostic-form h3 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Formulaire */
+.diagnostic-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeInUp 0.9s ease-out;
+}
+
+/* Groupe de formulaire */
+.form-group {
+  margin-bottom: 20px;
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Labels */
+.form-group label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Champs de saisie */
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fafafa;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* Focus des champs */
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  transform: scale(1.01); /* Petit zoom au focus */
+}
+
+/* Suggestions */
+.suggestions {
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-top: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Éléments de suggestion */
+.suggestion-item {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Checkbox dans les suggestions */
+.suggestion-item input {
+  margin-right: 8px;
+}
+
+/* Survol des suggestions */
+.suggestion-item:hover {
+  background-color: #f1f5f9;
+  transform: translateX(5px);
+}
+
+/* Symptômes sélectionnés */
+.selected-symptomes {
+  margin-top: 16px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Liste des symptômes sélectionnés */
+.selected-symptomes div {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.selected-symptomes div:hover {
+  transform: scale(1.02);
+}
+
+/* Tableau des patients */
+.patient-list {
+  margin-top: 24px;
+  animation: fadeInUp 0.9s ease-out;
+}
+
+.patient-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+}
+
+/* Cellules */
+.patient-list th,
+.patient-list td {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.patient-list th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  color: #333;
+}
+
+.patient-list tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Boutons */
+.diagnostic-form button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.diagnostic-form button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
+}
+
+/* Boutons dans le tableau */
+.patient-list button {
+  padding: 8px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.patient-list button:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* === Thème sombre === */
+.dark .diagnostic-form {
+  background-color: #2d3748;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.dark .diagnostic-form h3,
+.dark .form-group label {
+  color: #e5e7eb;
+}
+
+.dark .form-group input {
+  background-color: #4b5563;
+  color: #e5e7eb;
+  border: 1px solid #6b7280;
+}
+
+.dark .form-group input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+.dark .suggestions {
+  background-color: #4b5563;
+  border: 1px solid #6b7280;
+}
+
+.dark .suggestion-item {
+  color: #e5e7eb;
+}
+
+.dark .suggestion-item:hover {
+  background-color: #6b7280;
+}
+
+.dark .selected-symptomes div {
+  background-color: #4b5563;
+  border: 1px solid #6b7280;
+  color: #e5e7eb;
+}
+
+.dark .patient-list table {
+  background-color: #374151;
+}
+
+.dark .patient-list th {
+  background-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.dark .patient-list td {
+  color: #e5e7eb;
+}
+
+.dark .patient-list tr:nth-child(even) {
+  background-color: #2d3748;
+}
+
+.dark .patient-list button {
+  background-color: #dc3545;
+}
+
+.dark .patient-list button:hover {
+  background-color: #c82333;
+}
+
+.dark .diagnostic-form button {
+  background-color: #007bff;
+}
+
+.dark .diagnostic-form button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsivité */
+@media (max-width: 600px) {
+  .diagnostic-form {
+    padding: 16px;
+  }
+
+  .diagnostic-form h3 {
+    font-size: 22px;
+  }
+
+  .form-group input,
+  .diagnostic-form button {
+    font-size: 14px;
+  }
+
+  .patient-list th,
+  .patient-list td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}

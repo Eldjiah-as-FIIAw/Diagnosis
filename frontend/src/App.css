@@ -1,0 +1,362 @@
+/* ─────────────── App général ─────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ─────────────── Barre de navigation ─────────────── */
+nav,
+.header-logo {
+  position: fixed;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* position: relative; */
+  z-index: 1002;
+}
+
+nav {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─────────────── Conteneur principal ─────────────── */
+.main-container {
+  display: flex;
+  flex: 1;
+  background-color: #f5f6fa;
+  gap: 25px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* ─────────────── Sidebar (menu latéral) ─────────────── */
+.sidebar {
+  width: 260px;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  height: 100%;
+  overflow-y: auto;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+  z-index: 1000;
+}
+
+/* Bouton burger */
+.burger-button {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  z-index: 1003;
+}
+
+.burger-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Sidebar responsive */
+@media (max-width: 900px) {
+  .main-container {
+  flex-direction: column;
+  height: auto;
+  padding: 0;
+  align-items: stretch; /* ✅ pour que le contenu prenne toute la largeur */
+  justify-content: flex-start;
+}
+   .sidebar {
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+    display: block;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sidebar li {
+    display: block;
+    width: 100%;
+  }
+
+  .sidebar button {
+    width: 100%;
+    padding: 12px;
+    text-align: left;
+    font-size: 15px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+  }
+
+  .content-box {
+    width: 100%;
+    max-width: none;
+    margin: 10px 0;
+    padding: 15px;
+    min-height: 400px;
+  }
+.sidebar.open + .content {
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .burger-button {
+    display: block;
+  }
+
+  .main-container {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+  }
+}
+
+/* ─────────────── Zone centrale ─────────────── */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  overflow: hidden;
+}
+
+.content-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 95%;
+  max-width: 70%;
+  margin-left: 15%;
+  margin-top: 5%;
+  min-height: 500px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ─────────────── Formulaire de connexion ─────────────── */
+.login {
+  max-width: 420px;
+  margin: 80px auto;
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.login-form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-form button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: #dc3545;
+  margin-top: 8px;
+}
+
+/* ─────────────── Modules ─────────────── */
+.module-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding-top: 5%;
+  gap: 15px;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 15px;
+  height: 100%;
+}
+
+.module-box {
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background-color: #fff;
+  padding: 16px;
+  width: 200px;
+  height: 120px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.module-box:hover {
+  transform: scale(1.03);
+}
+
+.module-box.active {
+  flex: 1;
+  width: auto;
+  min-height: 80vh;
+  background-color: #f8fbff;
+  border-color: #4b9fff;
+  box-shadow: 0 6px 16px rgba(75, 159, 255, 0.25);
+  align-items: stretch;
+  text-align: left;
+  padding: 0;
+}
+
+.module-box.active .module-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #eaf3ff;
+  border-bottom: 2px solid #4b9fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.module-content {
+  flex: 1;
+  padding: 20px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.module-box.active .module-content {
+  opacity: 1;
+  max-height: 100%;
+  height: calc(100% - 50px);
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─────────────── Mode sombre ─────────────── */
+body.dark .content-box {
+  background: #2f2f2f;
+  color: #ffffff;
+}
+
+body.dark .sidebar {
+  background-color: #3a3a3a;
+  color: #f1f1f1;
+}
+
+body.dark .login {
+  background-color: #2f2f2f;
+  border: 1px solid #555;
+}
+
+body.dark .login-form input {
+  background-color: #555;
+  color: #fff;
+  border: 1px solid #777;
+}
+
+body.dark .login-form button {
+  background-color: #007bff;
+}
+
+body.dark .login-form button:hover {
+  background-color: #0056b3;
+}
+
+body.dark .error {
+  color: #ff6b6b;
+}
+
+/* ─────────────── Responsive ajustements ─────────────── */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 220px;
+  }
+  .content-box {
+    max-width: 85%;
+    margin-left: 7.5%;
+  }
+}
+
+@media (max-width: 900px) {
+  .content-box {
+    width: 100%;
+    margin: 0;
+    min-height: 400px;
+  }
+  .module-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .module-box {
+    width: 90%;
+    max-width: 400px;
+    margin: 10px 0;
+  }
+}

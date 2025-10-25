@@ -1,0 +1,143 @@
+/* --- Conteneur principal --- */
+/* --- Modules non actifs centrés verticalement --- */
+.module-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start; /* garde le flex-start pour l'actif */
+  gap: 20px;
+  height: 100vh;
+  width: 100%;
+  transition: all 0.5s ease;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+/* --- Module fermé (petit encadré) --- */
+.module-box {
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background-color: #fff;
+  padding: 16px;
+  width: 200px;
+  height: 120px; /* ⬅️ plus compact */
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.module-box:hover {
+  transform: scale(1.03);
+}
+
+/* --- Titre --- */
+.module-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+  transition: all 0.4s ease;
+}
+
+/* --- Icône --- */
+.module-icon {
+  font-size: 2rem;
+  color: #4b9fff;
+  opacity: 0.85;
+  transition: all 0.4s ease;
+  margin-bottom: 6px;
+}
+
+/* --- Quand actif : le contenu devient la zone principale --- */
+.module-box.active {
+  flex: 1; /* ⬅️ occupe tout l’espace central */
+  width: auto;
+  height: auto;
+  min-height: 80vh;
+  background-color: #f8fbff;
+  border-color: #4b9fff;
+  box-shadow: 0 6px 16px rgba(75, 159, 255, 0.25);
+  align-items: stretch;
+  text-align: left;
+  padding: 0;
+}
+.module-box:not(.active) {
+  margin-top: auto;
+  margin-bottom: auto;
+  transition: all 0.4s ease;
+}
+/* Bandeau haut du module actif */
+.module-box.active .module-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #eaf3ff;
+  border-bottom: 2px solid #4b9fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Icône réduite à gauche du titre */
+.module-box.active .module-icon {
+  font-size: 1.3rem;
+  color: #1e90ff;
+  opacity: 1;
+}
+
+/* Titre du bandeau actif */
+.module-box.active .module-title {
+  color: #1e90ff;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* --- Contenu du module actif : prend toute la place centrale --- */
+.module-content {
+  flex: 1;
+  padding: 20px;
+  opacity: 0;
+  max-height: 0;
+  overflow: auto;
+  transition: all 0.4s ease;
+}
+
+.module-box.active .module-content {
+  opacity: 1;
+  max-height: 100%;
+  height: calc(100% - 50px);
+  animation: fadeIn 0.4s ease forwards;
+}
+
+/* --- Animation d’apparition --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Mode sombre --- */
+body.dark .module-box {
+  background-color: #1e1e2f;
+  border-color: #555;
+  color: #ccc;
+}
+
+body.dark .module-box.active {
+  background-color: #2c2c3e;
+  border-color: #4b9fff;
+}
+
+body.dark .module-box.active .module-header {
+  background: #30304a;
+  border-bottom-color: #4b9fff;
+}
+
+body.dark .module-title { color: #ccc; }
+body.dark .module-box.active .module-title { color: #4b9fff; }
+body.dark .module-icon { color: #4b9fff; }

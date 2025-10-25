@@ -1,0 +1,31 @@
+{
+  "name": "diagnosis",
+  "version": "1.0.0",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "build:electron": "tsc --project tsconfig.electron.json",
+    "dev": "cross-env NODE_ENV=development && concurrently \"cd frontend && vite\" \"cd F:\\DiagnosisProject-main && .\\venv\\Scripts\\activate && python manage.py runserver\" \"wait-on http://localhost:5174 http://127.0.0.1:8000 && npx electron .\"",
+    "start": "cross-env NODE_ENV=development npx electron .",
+    "build": "cd frontend && vite build && electron-builder"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^10.1.0",
+    "electron": "^31.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^5.0.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.diagnosis.app",
+    "productName": "Diagnosis",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist-electron/**/*",
+      "frontend/dist/**/*"
+    ]
+  }
+}

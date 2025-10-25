@@ -1,0 +1,106 @@
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #4A90E2; /* Bleu doux pour le mode clair */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Au-dessus de tout */
+  }
+  
+  .dark .loading-overlay {
+    background-color: #1E3A8A; /* Bleu foncé pour le mode sombre */
+  }
+  
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .logo {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+  }
+  
+  .logo1 {
+    animation: fadeInAndMoveLeft 1s forwards 0.5s; /* Décalage vers la gauche */
+  }
+  
+  .logo2 {
+    animation: fadeInAndMoveRight 1s forwards 0.5s; /* Décalage vers la droite */
+  }
+  
+  .title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #ffffff; /* Texte blanc pour contraste avec le fond bleu */
+  }
+  
+  .dark .title {
+    color: #e0e0e0; /* Texte gris clair pour le mode sombre */
+  }
+  
+  .letter {
+    display: inline-block;
+    opacity: 0;
+    animation: fadeInLetter 0.5s forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fadeInLetter {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInAndMoveLeft {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(-100px); /* Décalage vers la gauche */
+    }
+  }
+  
+  @keyframes fadeInAndMoveRight {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(100px); /* Décalage vers la droite */
+    }
+  }

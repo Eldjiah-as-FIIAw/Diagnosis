@@ -1,0 +1,12 @@
+.community {
+  padding: 20px;
+}
+
+.community h2 {
+  margin-bottom: 20px;
+}
+
+.community ul {
+  list-style: disc;
+  padding-left: 20px;
+}
