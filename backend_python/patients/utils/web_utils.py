@@ -7,7 +7,7 @@ import unicodedata
 from time import sleep
 
 # Récupération propre de la clé API
-SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
+SERPAPI_API_KEY = "8c6a979923b8abdc35eac9872eeeb696eb7e744d2de082891de0f64febb77cca"
 
 def normalize_text(text: str) -> str:
     """Nettoie le texte pour les recherches Google."""
@@ -62,7 +62,7 @@ def search_web_serpapi(query: str, num_results=3):
             title = item.get("title", "Sans titre")
             link = item.get("link", "")
             if title and link:
-                results.append((t0000itle, link))
+                results.append((title, link))
 
         if not results:
             print(f"⚠️ Aucun résultat SerpAPI pour : {query}")

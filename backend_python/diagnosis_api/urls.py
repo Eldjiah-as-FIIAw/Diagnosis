@@ -41,4 +41,6 @@ urlpatterns = [
 
     # Routes de l’app patients
     path('api/', include('patients.urls')),
+
+    path('api/image/', include('image_recognition.urls')),
 ]

@@ -4,7 +4,7 @@
   "main": "dist-electron/main.js",
   "scripts": {
     "build:electron": "tsc --project tsconfig.electron.json",
-    "dev": "cross-env NODE_ENV=development && concurrently \"cd frontend && vite\" \"cd F:\\DiagnosisProject-main && .\\venv\\Scripts\\activate && python manage.py runserver\" \"wait-on http://localhost:5174 http://127.0.0.1:8000 && npx electron .\"",
+    "dev": "cross-env NODE_ENV=development && concurrently \"cd frontend && vite\" \"cd C:\\GrandProjet\\Diagnosis\\backend_python && python manage.py runserver\"",
     "start": "cross-env NODE_ENV=development npx electron .",
     "build": "cd frontend && vite build && electron-builder"
   },

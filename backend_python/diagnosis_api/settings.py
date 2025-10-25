@@ -15,8 +15,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 # Sécurité
-SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG') == 'True'
+SECRET_KEY = 'mirado-kely-super-@sécurisé'
+DEBUG = True
 ALLOWED_HOSTS = []
 
 # Applications Django
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django_ratelimit',
     # Métier
     'patients',
+    'image_recognition'
 ]
 
 # Middlewares
@@ -74,10 +75,10 @@ WSGI_APPLICATION = 'diagnosis_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASS'),
-        'HOST': os.getenv('DB_HOST'),
+        'NAME': 'grandprojet',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '3306',
         'CONN_MAX_AGE': 300,
         'ATOMIC_REQUESTS': True,
@@ -85,7 +86,7 @@ DATABASES = {
 }
 
 # Connexion MongoDB
-MONGO_URI = os.getenv('MONGO_URI')
+# MONGO_URI = os.getenv('MONGO_URI')
 
 # REST Framework configuration
 REST_FRAMEWORK = {
