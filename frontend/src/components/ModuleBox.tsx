@@ -1,3 +1,4 @@
+// ModuleBox.tsx (inchangé)
 import React, { ReactNode } from 'react';
 import './ModuleBox.css';
 

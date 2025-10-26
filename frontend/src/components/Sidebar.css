@@ -3,35 +3,40 @@
   position: fixed;
   top: 140px; /* Hauteur de HeaderLogo (80px) + Navbar (60px) */
   left: 0;
-  height: calc(100vh - 140px); /* Ajuster la hauteur */
+  height: calc(100vh - 140px);
   background-color: #f8f9fa;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  z-index: 900;
+  z-index: 1001;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100%; /* S'assurer que la liste utilise toute la hauteur disponible */
 }
 
 .sidebar li {
-  margin-bottom: 10px;
+  width: 100%;
 }
 
 .sidebar button {
   width: 100%;
   text-align: left;
   padding: 10px;
-  background-color: transparent;
-  border: none;
+  background-color: #ffffff; /* Fond blanc explicite pour la visibilité */
+  border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   color: #333333;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s, font-weight 0.3s;
 }
 
 .sidebar button:hover {
@@ -40,7 +45,18 @@
 
 .sidebar button.active {
   background-color: #e9ecef;
+  color: #007bff;
   font-weight: bold;
+}
+
+.sidebar-empty {
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  background-color: #ffffff; /* Fond blanc pour la visibilité */
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .dark .sidebar {
@@ -49,18 +65,67 @@
 }
 
 .dark .sidebar button {
+  background-color: #555555;
+  border-color: #777777;
   color: #ffffff;
 }
 
 .dark .sidebar button:hover,
 .dark .sidebar button.active {
-  background-color: #555555;
+  background-color: #666666;
+  color: #4b9fff;
 }
 
-@media (max-width: 768px) {
+.dark .sidebar-empty {
+  background-color: #555555;
+  color: #cccccc;
+  border-color: #777777;
+}
+
+@media (max-width: 900px) {
   .sidebar {
-    width: 200px;
-    top: 110px; /* Hauteur de HeaderLogo (60px) + Navbar (50px) */
-    height: calc(100vh - 110px); /* Ajuster la hauteur pour mobile */
+    top: 0;
+    width: 100%;
+    max-width: 280px;
+    height: 100vh;
+    transform: translateX(-100%);
+    opacity: 0;
+    padding: 20px;
+    border-radius: 0;
+    z-index: 1001;
+    background-color: #f8f9fa;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .sidebar ul {
+    padding-top: 80px; /* Espace pour HeaderLogo (80px) */
+    gap: 12px;
+    min-height: calc(100% - 80px); /* Ajuster la hauteur pour le padding */
+  }
+
+  .sidebar button {
+    padding: 12px;
+    font-size: 15px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+
+  .dark .sidebar {
+    background-color: #444444;
+  }
+
+  .dark .sidebar button {
+    background: #555555;
+    border-color: #777777;
+    color: #ffffff;
+  }
+
+  .sidebar-empty {
+    margin-top: 80px; /* Aligné avec le padding-top de ul */
   }
 }

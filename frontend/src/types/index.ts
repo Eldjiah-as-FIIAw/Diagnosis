@@ -1,5 +1,3 @@
-// types/index.ts
-
 export interface Patient {
   id: number;
   full_name: string;
@@ -17,23 +15,23 @@ export interface Diagnostic {
   diagnostic: string;
   date: string;
   severityScore: number;
-  disease?: string;       // 🔹 ajouter optionnel
-  probability?: number;   // 🔹 ajouter optionnel
-  justification?: string; // <-- ajouter cette ligne
+  disease?: string;
+  probability?: number;
+  justification?: string;
 }
-
 
 export interface Symptome {
   fr: string;
   en: string;
   severity: number;
 }
+
 export interface DiagnosticStats {
   disease: string;
   count: number;
   averageSeverity?: number;
   sex: 'male' | 'female';
-  age: number; // 🔹 ajouter pour filtrage par âge
+  age: number;
 }
 
 export interface WebResult {
@@ -41,4 +39,5 @@ export interface WebResult {
   url: string;
   snippet: string;
 }
-export type SubView = 'name' | 'symptome' | 'date' | 'diagnostic' | 'add' | 'history' | 'scanner' | 'search' | 'graph' | 'stats' ;
+
+export type SubView = 'name' | 'symptome' | 'date' | 'diagnostic' | 'add' | 'history' | 'scanner' | 'graph' | 'stats';

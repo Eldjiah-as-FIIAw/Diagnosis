@@ -14,7 +14,6 @@ import Statistics from '@/modules/Analysis/Statistics';
 import Community from '@/modules/Community/Community';
 import Help from '@/modules/Help/Help';
 import Settings from '@/modules/Settings/Settings';
-import ModuleBox from '@/components/ModuleBox';
 import axios from 'axios';
 import './App.css';
 import { SubView } from '@/types';
@@ -30,6 +29,14 @@ import {
   Settings as Cog,
 } from 'lucide-react';
 
+interface Module {
+  title: string;
+  icon: React.ReactNode;
+  id: string;
+  content: React.ReactNode;
+  onClick?: () => void;
+}
+
 const App: React.FC = () => {
   const [view, setView] = useState<
     'home' | 'diagnostic' | 'analysis' | 'search' | 'community' | 'help' | 'settings' | 'login'
@@ -42,8 +49,6 @@ const App: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
-
-  // 🟢 Gestion du menu burger
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -66,9 +71,17 @@ const App: React.FC = () => {
       name: 'search-name',
       symptome: 'search-symptome',
       date: 'search-date',
+      diagnostic: 'search-diagnostic',
     };
     setActiveModule(map[subView] || '');
+    setIsSidebarOpen(false);
+    console.log('subView changed:', subView, 'isSidebarOpen:', isSidebarOpen);
   }, [subView]);
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+    console.log('view changed:', view, 'isSidebarOpen:', isSidebarOpen);
+  }, [view]);
 
   const handleLogin = async () => {
     try {
@@ -84,110 +97,134 @@ const App: React.FC = () => {
     }
   };
 
+  const modules: { [key in 'diagnostic' | 'analysis' | 'search' | 'community' | 'help' | 'settings']: Module[] } = {
+    diagnostic: [
+      {
+        title: 'Ajouter Diagnostic',
+        icon: <Stethoscope />,
+        id: 'diagnostic-add',
+        content: token && <DiagnosticForm token={token} />,
+      },
+      {
+        title: 'Historique',
+        icon: <History />,
+        id: 'diagnostic-history',
+        content: token && <DiagnosticHistory token={token} />,
+      },
+      {
+        title: 'Scanner',
+        icon: <ScanLine />,
+        id: 'diagnostic-scanner',
+        content: <Scanner />,
+      },
+      {
+        title: 'Contrôle & Recherche',
+        icon: <SearchIcon />,
+        id: 'search',
+        onClick: () => setView('search'),
+        content: <p>Cliquez pour aller à la recherche complète.</p>,
+      },
+    ],
+    analysis: [
+      {
+        title: 'Graphiques',
+        icon: <BarChart />,
+        id: 'analysis-graph',
+        content: <Analysis token={token} />,
+      },
+      {
+        title: 'Statistiques',
+        icon: <PieChart />,
+        id: 'analysis-stats',
+        content: <Statistics token={token} />,
+      },
+    ],
+    search: [
+      {
+        title: `Recherche par ${subView ? { name: 'Nom', symptome: 'Symptôme', date: 'Date', diagnostic: 'Diagnostic' }[subView as 'name' | 'symptome' | 'date' | 'diagnostic'] || 'Nom' : 'Nom'}`,
+        icon: <SearchIcon />,
+        id: 'search',
+        content: token && <Search subView={subView as 'name' | 'symptome' | 'date' | 'diagnostic' | ''} token={token} />,
+      },
+    ],
+    community: [
+      {
+        title: 'Communauté',
+        icon: <Users />,
+        id: 'community',
+        content: <Community />,
+      },
+    ],
+    help: [
+      {
+        title: 'Aide',
+        icon: <HelpCircle />,
+        id: 'help',
+        content: <Help />,
+      },
+    ],
+    settings: [
+      {
+        title: 'Paramètres',
+        icon: <Cog />,
+        id: 'settings',
+        content: <Settings theme={theme} setTheme={setTheme} token={token} />,
+      },
+    ],
+  };
+
   const renderModules = () => {
-    switch (view) {
-      case 'diagnostic':
-        return (
-          <div className="module-container">
-            <ModuleBox
-              title="Ajouter Diagnostic"
-              icon={<Stethoscope />}
-              isActive={activeModule === 'diagnostic-add'}
-              onClick={() => setActiveModule('diagnostic-add')}
-            >
-              {token && <DiagnosticForm token={token} />}
-            </ModuleBox>
-
-            <ModuleBox
-              title="Historique"
-              icon={<History />}
-              isActive={activeModule === 'diagnostic-history'}
-              onClick={() => setActiveModule('diagnostic-history')}
-            >
-              {token && <DiagnosticHistory token={token} />}
-            </ModuleBox>
-
-            <ModuleBox
-              title="Scanner"
-              icon={<ScanLine />}
-              isActive={activeModule === 'diagnostic-scanner'}
-              onClick={() => setActiveModule('diagnostic-scanner')}
-            >
-              <Scanner />
-            </ModuleBox>
-
-            <ModuleBox
-              title="Contrôle & Recherche"
-              icon={<SearchIcon />}
-              isActive={false}
-              onClick={() => setView('search')}
-            >
-              <p>Cliquez pour aller à la recherche complète.</p>
-            </ModuleBox>
-          </div>
-        );
-
-      case 'analysis':
-        return (
-          <div className="module-container">
-            <ModuleBox
-              title="Graphiques"
-              icon={<BarChart />}
-              isActive={activeModule === 'analysis-graph'}
-              onClick={() => setActiveModule('analysis-graph')}
-            >
-              <Analysis token={token} />
-            </ModuleBox>
-
-            <ModuleBox
-              title="Statistiques"
-              icon={<PieChart />}
-              isActive={activeModule === 'analysis-stats'}
-              onClick={() => setActiveModule('analysis-stats')}
-            >
-              <Statistics token={token} />
-            </ModuleBox>
-          </div>
-        );
-
-      case 'search':
-        const searchLabelMap: { [key in SubView]?: string } = {
-          name: 'Nom',
-          symptome: 'Symptôme',
-          date: 'Date',
-        };
-        const searchLabel = subView ? searchLabelMap[subView] || 'Nom' : 'Nom';
-
-        return (
-          <ModuleBox title={`Recherche par ${searchLabel}`} icon={<SearchIcon />} isActive={true}>
-            {token && <Search subView={subView as any} token={token} />}
-          </ModuleBox>
-        );
-
-      case 'community':
-        return (
-          <ModuleBox title="Communauté" icon={<Users />} isActive={true}>
-            <Community />
-          </ModuleBox>
-        );
-
-      case 'help':
-        return (
-          <ModuleBox title="Aide" icon={<HelpCircle />} isActive={true}>
-            <Help />
-          </ModuleBox>
-        );
-
-      case 'settings':
-        return (
-          <ModuleBox title="Paramètres" icon={<Cog />} isActive={true}>
-            <Settings theme={theme} setTheme={setTheme} token={token} />
-          </ModuleBox>
-        );
-
-      default:
-        return <Home />;
+    if (view === 'home') {
+      return <Home />;
     }
+
+    if (view === 'login') {
+      return (
+        <div className="login">
+          <h2>Connexion</h2>
+          <div className="login-form">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Nom d'utilisateur"
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mot de passe"
+            />
+            <button onClick={handleLogin}>Se connecter</button>
+            {loginError && <p className="error">{loginError}</p>}
+          </div>
+        </div>
+      );
+    }
+
+    const currentModules = modules[view] || [];
+
+    return (
+      <div className="module-container">
+        <div className="tabs-bar">
+          {currentModules.map((mod) => (
+            <div
+              key={mod.id}
+              className={`module-header ${activeModule === mod.id ? 'active' : ''}`}
+              onClick={() => (mod.onClick ? mod.onClick() : setActiveModule(mod.id))}
+            >
+              <div className={`module-icon ${activeModule === mod.id ? 'active' : ''}`}>
+                {mod.icon}
+              </div>
+              <div className="module-title">{mod.title}</div>
+            </div>
+          ))}
+        </div>
+        <div className="content-area">
+          {activeModule && currentModules.find((mod) => mod.id === activeModule)?.content}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -197,47 +234,24 @@ const App: React.FC = () => {
       ) : (
         <>
           <HeaderLogo />
-
-          {/* 🟢 Bouton burger */}
-          <button className="burger-button" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          <button
+            className="burger-button"
+            onClick={() => {
+              setIsSidebarOpen(!isSidebarOpen);
+              console.log('Burger clicked, isSidebarOpen:', !isSidebarOpen);
+            }}
+          >
             {isSidebarOpen ? <X /> : <Menu />}
           </button>
-
           <Navbar setView={setView} />
-
           <div className="main-container">
             {view !== 'login' && (
               <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-                <Sidebar view={view} setSubView={setSubView} />
+                <Sidebar view={view} setSubView={setSubView} activeSubView={subView} />
               </aside>
             )}
-
             <main className={`content ${view === 'login' ? 'full-width' : ''}`}>
-              <div className="content-box">
-                {view === 'login' ? (
-                  <div className="login">
-                    <h2>Connexion</h2>
-                    <div className="login-form">
-                      <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Nom d'utilisateur"
-                      />
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Mot de passe"
-                      />
-                      <button onClick={handleLogin}>Se connecter</button>
-                      {loginError && <p className="error">{loginError}</p>}
-                    </div>
-                  </div>
-                ) : (
-                  renderModules()
-                )}
-              </div>
+              <div className="content-box">{renderModules()}</div>
             </main>
           </div>
         </>
