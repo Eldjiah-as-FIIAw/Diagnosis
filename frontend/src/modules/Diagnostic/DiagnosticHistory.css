@@ -1,94 +1,127 @@
 .diagnostic-history {
   padding: 24px;
-  max-width: 700px;
-  margin: 0 auto 40px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.5s ease-in-out;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .diagnostic-history h3 {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  color: #333;
-  text-align: center;
+  color: #111827;
   margin-bottom: 24px;
+  text-align: center;
 }
 
-.diagnostic-history ul {
-  list-style: none;
-  padding: 0;
+/* Cartes Pinterest */
+.diagnostic-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.diagnostic-card {
+  background-color: #f9fafb;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-
-  /* ✅ Scroll activé */
-  max-height: 400px;
-  overflow-y: auto;
-
-  /* Pour un scroll plus joli */
-  scrollbar-width: thin;
-  scrollbar-color: #a0aec0 #f1f1f1;
-}
-
-/* Style pour le scrollbar sur Chrome/Safari */
-.diagnostic-history ul::-webkit-scrollbar {
-  width: 8px;
-}
-.diagnostic-history ul::-webkit-scrollbar-thumb {
-  background-color: #a0aec0;
-  border-radius: 4px;
-}
-.diagnostic-history ul::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.diagnostic-history li {
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  background-color: #f9fafb;
+  gap: 12px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.diagnostic-history li:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+.diagnostic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 
-.diagnostic-history li strong {
+/* Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 600;
-  color: #1d4ed8;
+  color: #111827;
+  font-size: 15px;
 }
 
-.diagnostic-history li br {
-  margin-bottom: 4px;
+.card-header .age {
+  font-size: 13px;
+  color: #6b7280;
 }
 
-.diagnostic-history p {
+/* Symptômes */
+.symptomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.symptome-tag {
+  background-color: #dbeafe;
+  color: #1e40af;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.no-symptome {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Diagnostic et date */
+.diagnostic-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.diagnostic-info .date {
+  font-weight: 400;
+  color: #6b7280;
+}
+
+/* Badge probabilité */
+.probability-badge {
+  align-self: flex-start;
+  background-color: #3b82f6;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 4px 10px;
+  margin-top: 6px;
   text-align: center;
-  color: #555;
 }
 
-/* Animation fadeIn */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Dark mode */
-.dark .diagnostic-history {
+/* === Dark mode === */
+.dark .diagnostic-card {
   background-color: #1f2937;
-  color: #e5e7eb;
-  border: 1px solid #374151;
+  color: #f9fafb;
 }
 
-.dark .diagnostic-history li {
-  background-color: #374151;
-  border-color: #4b5563;
+.dark .card-header,
+.dark .diagnostic-info {
+  color: #f9fafb;
 }
 
-.dark .diagnostic-history li strong {
-  color: #60a5fa;
+.dark .symptome-tag {
+  background-color: #2563eb;
+  color: #bfdbfe;
+}
+
+.dark .probability-badge {
+  background-color: #10b981;
+}
+
+/* Responsivité */
+@media (max-width: 600px) {
+  .diagnostic-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }

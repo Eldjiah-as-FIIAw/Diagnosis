@@ -1,16 +1,128 @@
 .home {
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  scroll-behavior: smooth;
 }
 
-.home h2 {
-  margin-bottom: 20px;
+.home-header {
+  text-align: center;
+  margin-bottom: 32px;
 }
 
-.home p {
-  margin-bottom: 15px;
+.home-header h1 {
+  font-size: 40px;
+  margin-bottom: 12px;
 }
 
-.home ul {
-  list-style: disc;
-  padding-left: 20px;
+.home-header h1 span {
+  color: #007bff;
+  font-weight: 700;
+}
+
+.home-header p {
+  font-size: 18px;
+  color: #555;
+}
+
+.home-categories {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.home-categories button {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #007bff;
+  background: #fff;
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.home-categories button.active,
+.home-categories button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.home-masonry {
+  column-count: 3;
+  column-gap: 16px;
+}
+
+.home-card {
+  display: inline-block;
+  background: #fff;
+  margin-bottom: 16px;
+  width: 100%;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.5s ease-out;
+}
+
+.home-card.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+}
+
+.home-card-icon {
+  font-size: 30px;
+  color: #007bff;
+  margin-bottom: 12px;
+}
+
+.home-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.home-card p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.home-card button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.home-card button:hover {
+  background: #007bff;
+  transform: scale(1.05);
+}
+
+/* Responsive Masonry */
+@media (max-width: 1200px) { .home-masonry { column-count: 2; } }
+@media (max-width: 768px) { .home-masonry { column-count: 1; } }
+
+/* Animation fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-card.fade-in {
+  animation-name: fadeIn;
+  animation-duration: 0.6s;
+  animation-fill-mode: forwards;
 }

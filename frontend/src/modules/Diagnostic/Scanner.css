@@ -1,87 +1,221 @@
 .scanner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  width: 100%;
-  max-width: 500px;
-  margin: auto;
-  font-family: "Segoe UI", sans-serif;
+  gap: 22px;
+  animation: fadeInUp 0.6s ease-out;
+  font-family: 'Inter', sans-serif;
 }
 
+.scanner h2 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Inputs et selects */
 .scanner-inputs {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 14px;
   justify-content: center;
-  margin-bottom: 10px;
 }
 
 .scanner-inputs input,
 .scanner-inputs select {
-  padding: 8px 10px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+  flex: 1;
+  min-width: 150px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.scanner-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
+.scanner-inputs input:focus,
+.scanner-inputs select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
 }
 
-.scanner-actions button {
-  padding: 10px 15px;
+/* Buttons */
+.scanner button {
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.scanner-actions button:hover {
-  background-color: #0056b3;
+.scanner button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-.scanner-preview {
+/* Video */
+.scanner video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* Preview image */
+.scanner-preview img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Resultat IA */
+.scanner-result {
+  padding: 18px;
+  border-radius: 12px;
+  background-color: #f0f9ff;
+  border: 1px solid #60a5fa;
+  animation: fadeInUp 0.5s ease-out;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 10px;
-  margin-top: 15px;
 }
 
-.scanner-preview img {
-  max-width: 300px;
-  max-height: 300px;
+.scanner-result p {
+  margin: 4px 0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Badge de probabilité */
+.badge-prob {
+  display: inline-block;
+  padding: 3px 8px;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  object-fit: contain;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
 }
 
-.scanner-result {
-  margin-top: 15px;
-  font-weight: bold;
-  font-size: 16px;
-  color: #28a745;
-  text-align: center;
+.prob-low { background-color: #10b981; }    /* vert */
+.prob-medium { background-color: #facc15; } /* jaune */
+.prob-high { background-color: #ef4444; }   /* rouge */
+
+/* Probabilités détaillées - mini barres */
+.prob-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
 }
 
+.prob-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.prob-bar .label {
+  width: 80px;
+}
+
+.prob-bar .bar {
+  height: 12px;
+  border-radius: 6px;
+  background-color: #e5e7eb;
+  flex: 1;
+  overflow: hidden;
+}
+
+.prob-bar .bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  background-color: #3b82f6;
+  transition: width 0.4s ease;
+}
+
+/* Historique */
 .scanner-history {
-  width: 100%;
   margin-top: 20px;
+}
+
+.scanner-history h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 14px;
 }
 
 .scanner-history ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .scanner-history li {
-  padding: 5px 0;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fafb;
+  padding: 14px 16px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 500;
+}
+
+.scanner-history li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* === Dark Mode === */
+.dark .scanner {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark .scanner-inputs input,
+.dark .scanner-inputs select {
+  background-color: #374151;
+  color: #f9fafb;
+  border: 1px solid #6b7280;
+}
+
+.dark .scanner-result {
+  background-color: #2563eb;
+  color: #f0f9ff;
+  border-color: #3b82f6;
+}
+
+.dark .scanner-history li {
+  background-color: #374151;
+  color: #f9fafb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Animation fadeInUp */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .scanner-inputs { flex-direction: column; }
 }

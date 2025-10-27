@@ -1,8 +1,9 @@
 // src/modules/Diagnostic/DiagnosticHistory.tsx
 import React, { useEffect, useState } from 'react';
-import { getDiagnostics, } from '@/services/api';
+import { getDiagnostics } from '@/services/api';
 import { Diagnostic } from '@/types';
 import './DiagnosticHistory.css';
+import { FaUser, FaHeartbeat } from 'react-icons/fa';
 
 interface DiagnosticHistoryProps {
   token: string;
@@ -20,19 +21,18 @@ const DiagnosticHistory: React.FC<DiagnosticHistoryProps> = ({ token }) => {
 
       try {
         const data = await getDiagnostics(token);
-        // Mapper les valeurs manquantes et convertir symptomes en tableau si nécessaire
         const mapped: Diagnostic[] = data.map((d: any) => ({
-  id: d.id,
-  patientId: d.patient?.id ?? 0,
-  patientName: d.patient?.full_name || 'Inconnu',
-  age: d.patient?.age ?? 0,
-  symptomes: Array.isArray(d.symptomes) ? d.symptomes : [],
-  diagnostic: d.disease || 'N/A',
-  severityScore: d.probability != null ? d.probability * 100 : 0,
-  disease: d.disease,
-  probability: d.probability,
-  date: d.date || new Date().toISOString(),
-}));
+          id: d.id,
+          patientId: d.patient?.id ?? 0,
+          patientName: d.patient?.full_name || 'Inconnu',
+          age: d.patient?.age ?? 0,
+          symptomes: Array.isArray(d.symptomes) ? d.symptomes : [],
+          diagnostic: d.disease || 'N/A',
+          severityScore: d.probability != null ? d.probability * 100 : 0,
+          disease: d.disease,
+          probability: d.probability,
+          date: d.date || new Date().toISOString(),
+        }));
 
         setDiagnostics(mapped);
       } catch (err: any) {
@@ -53,17 +53,30 @@ const DiagnosticHistory: React.FC<DiagnosticHistoryProps> = ({ token }) => {
     <div className="diagnostic-history">
       <h3>Historique des Diagnostics</h3>
       {diagnostics.length > 0 ? (
-        <ul>
+        <div className="diagnostic-cards">
           {diagnostics.map((diag) => (
-            <li key={diag.id}>
-              <strong>{diag.patientName}</strong> -{' '}
-              {diag.date ? new Date(diag.date).toLocaleDateString() : 'Date inconnue'} :<br />
-              Symptômes : {diag.symptomes.length > 0 ? diag.symptomes.join(', ') : 'Aucun'}<br />
-              Diagnostic : {diag.diagnostic}<br />
-              Score de sévérité : {diag.severityScore.toFixed(2)}%
-            </li>
+            <div key={diag.id} className="diagnostic-card">
+              <div className="card-header">
+                <FaUser /> <span>{diag.patientName}</span>
+                <span className="age">{diag.age} ans</span>
+              </div>
+              <div className="card-body">
+                <div className="symptomes">
+                  {diag.symptomes.length > 0 ? diag.symptomes.map((s, i) => (
+                    <span key={i} className="symptome-tag">{s}</span>
+                  )) : <span className="no-symptome">Aucun symptôme</span>}
+                </div>
+                <div className="diagnostic-info">
+                  <FaHeartbeat /> <span>{diag.diagnostic}</span>
+                  <span className="date">{new Date(diag.date).toLocaleDateString()}</span>
+                </div>
+                <div className="probability-badge">
+                  {diag.severityScore.toFixed(2)}%
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>Aucun diagnostic trouvé.</p>
       )}

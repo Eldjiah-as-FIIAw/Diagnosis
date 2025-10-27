@@ -1,210 +1,116 @@
-/* === Animation douce === */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Conteneur principal des paramètres */
+/* src/modules/Settings/Settings.css */
 .settings {
-  padding: 24px;
   max-width: 700px;
-  margin: 0 auto;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 0.6s ease-out;
+  margin: 20px auto;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* Titres */
-.settings h2,
-.settings h3,
-.settings h4 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
+.settings.dark {
+  background-color: #2d3748;
+  color: #e5e7eb;
+}
+
+.settings h2 {
   text-align: center;
-  animation: fadeInUp 0.8s ease-out;
+  margin-bottom: 20px;
 }
 
-/* Formulaire */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 500px;
-  margin: 0 auto;
-  animation: fadeInUp 0.9s ease-out;
+.theme-selector {
+  margin-bottom: 30px;
 }
 
-/* Labels et champs */
-.form-group label {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.form-group input,
-.settings select {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
+.theme-selector select {
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 15px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid #ccc;
 }
 
-.form-group input:focus,
-.settings select:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
-  transform: scale(1.01);
+.symptomes-manager {
+  margin-top: 20px;
 }
 
-/* Bouton de soumission */
-.form-group button,
-.settings button {
-  padding: 10px 16px;
+.symptome-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.symptome-inputs input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  flex: 1 1 150px;
+}
+
+.symptome-inputs .add-btn {
   background-color: #007bff;
   color: white;
   border: none;
+  padding: 8px 16px;
   border-radius: 6px;
-  font-size: 15px;
-  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-group button:hover,
-.settings button:hover {
-  background-color: #0056b3;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transform: scale(1.03);
+.symptome-inputs .add-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Liste des symptômes */
-.settings ul {
-  list-style-type: none;
+.symptome-list {
+  list-style: none;
   padding: 0;
-  margin-top: 16px;
-  animation: fadeInUp 1s ease-out;
-
-  /* ✅ Scroll uniquement ici */
-  max-height: 300px;
-  overflow-y: auto;
-
-  /* Scrollbar stylée */
-  scrollbar-width: thin;
-  scrollbar-color: #a0aec0 #f1f1f1;
+  margin: 0;
 }
 
-.settings ul::-webkit-scrollbar {
-  width: 8px;
-}
-.settings ul::-webkit-scrollbar-thumb {
-  background-color: #a0aec0;
-  border-radius: 4px;
-}
-.settings ul::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-.settings li {
-  background-color: #f8f9fa;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
+.symptome-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #f8f9fa;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.settings li:hover {
-  background-color: #eef3f8;
-  transform: translateX(5px);
+.settings.dark .symptome-list li {
+  background-color: #4b5563;
+  border: 1px solid #6b7280;
+  color: #e5e7eb;
 }
 
-/* Bouton de suppression */
-.settings li button {
+.symptome-list li:hover {
+  transform: scale(1.02);
+}
+
+.remove-btn {
   background-color: #dc3545;
   color: white;
   border: none;
-  border-radius: 4px;
   padding: 6px 12px;
-  font-size: 14px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.settings li button:hover {
+.remove-btn:hover {
   background-color: #c82333;
   transform: scale(1.05);
 }
 
-/* === Thème sombre === */
-.dark .settings {
-  background-color: #2d3748;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+/* Animation fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.dark .settings h2,
-.dark .settings h3,
-.dark .settings h4,
-.dark .form-group label {
-  color: #e5e7eb;
-}
-
-.dark .form-group input,
-.dark .settings select {
-  background-color: #4b5563;
-  color: #e5e7eb;
-  border: 1px solid #6b7280;
-}
-
-.dark .form-group input:focus,
-.dark .settings select:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
-}
-
-.dark .settings li {
-  background-color: #4b5563;
-  border: 1px solid #6b7280;
-  color: #e5e7eb;
-}
-
-.dark .settings li:hover {
-  background-color: #6b7280;
-}
-
-.dark .settings li button {
-  background-color: #dc3545;
-}
-
-.dark .settings li button:hover {
-  background-color: #c82333;
-}
-
-/* Responsivité */
-@media (max-width: 600px) {
-  .settings {
-    padding: 16px;
-  }
-
-  .settings h2,
-  .settings h3 {
-    font-size: 20px;
-  }
-
-  .form-group input,
-  .settings button {
-    font-size: 14px;
-  }
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
 }
