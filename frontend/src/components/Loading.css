@@ -1,106 +1,104 @@
+/* Overlay */
 .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: #4A90E2; /* Bleu doux pour le mode clair */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000; /* Au-dessus de tout */
-  }
-  
-  .dark .loading-overlay {
-    background-color: #1E3A8A; /* Bleu foncé pour le mode sombre */
-  }
-  
-  .loading-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #4A90E2; /* Bleu doux */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  flex-direction: column;
+}
+
+.dark .loading-overlay {
+  background-color: #1E3A8A; /* Bleu foncé mode sombre */
+}
+
+/* Contenu */
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Logos */
+.logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  opacity: 0;
+  object-fit: cover;
+  animation: fadeInScale 0.8s forwards;
+}
+
+.logo1 {
+  animation: fadeInMoveLeft 1s forwards 0.3s;
+}
+
+.logo2 {
+  animation: fadeInMoveRight 1s forwards 0.3s;
+}
+
+/* Titre */
+.title {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  display: flex;
+  gap: 2px;
+}
+
+.dark .title {
+  color: #e0e0e0;
+}
+
+/* Animation lettres */
+.letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInLetter 0.5s forwards;
+}
+
+.letter:nth-child(1) { animation-delay: 0.6s; }
+.letter:nth-child(2) { animation-delay: 0.7s; }
+.letter:nth-child(3) { animation-delay: 0.8s; }
+/* ... continuer pour chaque lettre */
+
+/* Animations */
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInLetter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInMoveLeft {
+  0% { opacity: 0; transform: translateY(-20px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateX(-80px) scale(0.9); }
+}
+
+@keyframes fadeInMoveRight {
+  0% { opacity: 0; transform: translateY(-20px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateX(80px) scale(0.9); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .logo {
-    width: 100px;
-    height: 100px;
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
+    width: 70px;
+    height: 70px;
   }
-  
-  .logo1 {
-    animation: fadeInAndMoveLeft 1s forwards 0.5s; /* Décalage vers la gauche */
-  }
-  
-  .logo2 {
-    animation: fadeInAndMoveRight 1s forwards 0.5s; /* Décalage vers la droite */
-  }
-  
   .title {
-    font-size: 48px;
-    font-weight: bold;
-    color: #ffffff; /* Texte blanc pour contraste avec le fond bleu */
+    font-size: 32px;
   }
-  
-  .dark .title {
-    color: #e0e0e0; /* Texte gris clair pour le mode sombre */
-  }
-  
-  .letter {
-    display: inline-block;
-    opacity: 0;
-    animation: fadeInLetter 0.5s forwards;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.5);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes fadeInLetter {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeInAndMoveLeft {
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    50% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(-100px); /* Décalage vers la gauche */
-    }
-  }
-  
-  @keyframes fadeInAndMoveRight {
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    50% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(100px); /* Décalage vers la droite */
-    }
-  }
+}

@@ -1,3 +1,4 @@
+// src/modules/Scanner/Scanner.tsx
 import React, { useState, useRef } from "react";
 import "./Scanner.css";
 
@@ -14,19 +15,24 @@ interface Diagnostic {
   error?: string;
 }
 
+interface HistoryItem {
+  fileName: string;
+  result: string;
+}
+
 const Scanner: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [diagnostic, setDiagnostic] = useState<Diagnostic | null>(null);
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [patientName, setPatientName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [sex, setSex] = useState<"male" | "female">("male");
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // ─── Gestion fichier ───
+  // ─── Gestion du fichier ───
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const f = e.target.files[0];
@@ -90,7 +96,6 @@ const Scanner: React.FC = () => {
       formData.append("date_of_birth", dateOfBirth);
       formData.append("sex", sex);
 
-      // Récupérer le token JWT depuis le localStorage
       const token = localStorage.getItem("access_token");
       if (!token) {
         alert("Utilisateur non authentifié. Veuillez vous reconnecter.");
@@ -98,14 +103,11 @@ const Scanner: React.FC = () => {
         return;
       }
 
-      // Envoi au backend Django image_recognition
       const response = await fetch(
         "http://127.0.0.1:8000/api/image/ai-diagnosis/",
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // <-- JWT ici
-          },
+          headers: { Authorization: `Bearer ${token}` },
           body: formData,
         }
       );
@@ -124,11 +126,18 @@ const Scanner: React.FC = () => {
 
       setHistory([{ fileName: file.name, result: data.result }, ...history]);
     } catch (err: any) {
-      console.error("Erreur analyse AI:", err);
+      console.error("Erreur analyse IA:", err);
       setDiagnostic({ error: "❌ Échec analyse IA" });
     } finally {
       setLoading(false);
     }
+  };
+
+  // ─── Badge couleur selon probabilité ───
+  const getProbabilityBadge = (prob: number) => {
+    if (prob < 50) return "prob-low";
+    if (prob < 75) return "prob-medium";
+    return "prob-high";
   };
 
   return (
@@ -148,10 +157,7 @@ const Scanner: React.FC = () => {
           value={dateOfBirth}
           onChange={(e) => setDateOfBirth(e.target.value)}
         />
-        <select
-          value={sex}
-          onChange={(e) => setSex(e.target.value as "male" | "female")}
-        >
+        <select value={sex} onChange={(e) => setSex(e.target.value as "male" | "female")}>
           <option value="male">Homme</option>
           <option value="female">Femme</option>
         </select>
@@ -160,11 +166,7 @@ const Scanner: React.FC = () => {
       <input type="file" accept="image/*" onChange={handleFileChange} />
       <button onClick={startCamera}>📷 Activer Caméra</button>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        style={{ width: "300px", marginTop: "10px", borderRadius: "8px" }}
-      ></video>
+      <video ref={videoRef} autoPlay className="scanner-video"></video>
       <button onClick={captureFrame}>📸 Capturer Image</button>
 
       {preview && (
@@ -182,25 +184,30 @@ const Scanner: React.FC = () => {
       {diagnostic && (
         <div className="scanner-result">
           {diagnostic.error ? (
-            <span style={{ color: "red" }}>{diagnostic.error}</span>
+            <span className="scanner-error">{diagnostic.error}</span>
           ) : (
             <>
               <p>
-                🤖 Résultat IA :{" "}
-                <strong>{diagnostic.diagnostic?.disease}</strong> (
-                {diagnostic.diagnostic?.probability}%)
+                🤖 Résultat IA : <strong>{diagnostic.diagnostic?.disease}</strong>{" "}
+                <span className={`badge-prob ${getProbabilityBadge(diagnostic.diagnostic?.probability || 0)}`}>
+                  {diagnostic.diagnostic?.probability.toFixed(2)}%
+                </span>
               </p>
+
               {diagnostic.diagnostic?.probabilities && (
-                <ul>
-                  {Object.entries(diagnostic.diagnostic.probabilities).map(
-                    ([cls, prob]) => (
-                      <li key={cls}>
-                        {cls}: {(prob * 100).toFixed(2)}%
-                      </li>
-                    )
-                  )}
-                </ul>
+                <div className="prob-bars">
+                  {Object.entries(diagnostic.diagnostic.probabilities).map(([cls, prob]) => (
+                    <div className="prob-bar" key={cls}>
+                      <span className="label">{cls}</span>
+                      <div className="bar">
+                        <div className="bar-fill" style={{ width: `${prob * 100}%` }}></div>
+                      </div>
+                      <span>{(prob * 100).toFixed(2)}%</span>
+                    </div>
+                  ))}
+                </div>
               )}
+
               <p>Patient : {diagnostic.patient?.full_name}</p>
             </>
           )}
@@ -224,4 +231,3 @@ const Scanner: React.FC = () => {
 };
 
 export default Scanner;
-

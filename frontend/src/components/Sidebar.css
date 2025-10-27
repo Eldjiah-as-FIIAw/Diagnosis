@@ -1,17 +1,21 @@
+/* Sidebar principale */
 .sidebar {
   width: 250px;
   position: fixed;
-  top: 140px; /* Hauteur de HeaderLogo (80px) + Navbar (60px) */
+  top: 140px; /* Header (80px) + Navbar (60px) */
   left: 0;
   height: calc(100vh - 140px);
   background-color: #f8f9fa;
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   z-index: 1001;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  border-right: 1px solid #ddd;
+  border-radius: 0 12px 12px 0;
 }
 
+/* Liste des items */
 .sidebar ul {
   list-style: none;
   padding: 0;
@@ -19,46 +23,54 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-height: 100%; /* S'assurer que la liste utilise toute la hauteur disponible */
 }
 
+/* Item */
 .sidebar li {
   width: 100%;
 }
 
+/* Boutons */
 .sidebar button {
   width: 100%;
   text-align: left;
-  padding: 10px;
-  background-color: #ffffff; /* Fond blanc explicite pour la visibilité */
+  padding: 12px;
+  background-color: #ffffff;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
   color: #333333;
-  transition: background-color 0.3s, color 0.3s, font-weight 0.3s;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
+/* Hover */
 .sidebar button:hover {
   background-color: #e9ecef;
+  transform: translateX(2px); /* Légère translation pour dynamisme */
 }
 
+/* Active */
 .sidebar button.active {
   background-color: #e9ecef;
   color: #007bff;
   font-weight: bold;
+  border-color: #007bff;
 }
 
+/* Sidebar vide */
 .sidebar-empty {
-  color: #666;
-  font-size: 14px;
   text-align: center;
   padding: 20px;
-  background-color: #ffffff; /* Fond blanc pour la visibilité */
+  background-color: #ffffff;
+  color: #666666;
+  font-size: 14px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
+/* Mode sombre */
 .dark .sidebar {
   background-color: #444444;
   border-right: 1px solid #555555;
@@ -74,6 +86,7 @@
 .dark .sidebar button.active {
   background-color: #666666;
   color: #4b9fff;
+  border-color: #4b9fff;
 }
 
 .dark .sidebar-empty {
@@ -82,18 +95,19 @@
   border-color: #777777;
 }
 
+/* Responsive mobile */
 @media (max-width: 900px) {
   .sidebar {
     top: 0;
-    width: 100%;
+    left: 0;
+    width: 80%;
     max-width: 280px;
     height: 100vh;
     transform: translateX(-100%);
     opacity: 0;
     padding: 20px;
     border-radius: 0;
-    z-index: 1001;
-    background-color: #f8f9fa;
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
   .sidebar.open {
@@ -102,17 +116,18 @@
   }
 
   .sidebar ul {
-    padding-top: 80px; /* Espace pour HeaderLogo (80px) */
+    padding-top: 80px; /* Espace pour HeaderLogo */
     gap: 12px;
-    min-height: calc(100% - 80px); /* Ajuster la hauteur pour le padding */
   }
 
   .sidebar button {
     padding: 12px;
     font-size: 15px;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 10px;
+  }
+
+  .sidebar-empty {
+    margin-top: 80px; /* Aligné avec le padding-top de ul */
   }
 
   .dark .sidebar {
@@ -120,12 +135,8 @@
   }
 
   .dark .sidebar button {
-    background: #555555;
+    background-color: #555555;
     border-color: #777777;
     color: #ffffff;
-  }
-
-  .sidebar-empty {
-    margin-top: 80px; /* Aligné avec le padding-top de ul */
   }
 }
