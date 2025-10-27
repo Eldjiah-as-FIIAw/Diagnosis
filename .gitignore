@@ -30,3 +30,7 @@ __pycache__/
 *.log
 venv/
 .env"
+
+# Ignorer le modèle d'apprentissage automatique
+backend_python/image_recognition/diagnosis.keras
+
